@@ -1,3 +1,1 @@
-# BusqueTweet
-# Experimenting with the Twitter API.
-# So, yeah. Just fun 'n games.
+# BusqueTweet - Experimenting with the Twitter RESTful API. So, yeah. Just fun 'n games.
