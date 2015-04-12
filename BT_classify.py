@@ -153,7 +153,8 @@ for c in all_classes:
         else:
             temp_y.append('other')
     temp_y = np.matrix(temp_y)
-    Xtrain, Xtest, ytrain, ytest = cross_validation.train_test_split(dset[c.group][0], np.ravel(temp_y), train_size=.7, random_state=10)
+    Xtrain = dset[c.group][0]
+    ytrain = np.ravel(temp_y)
     SVMtrain = svm.SVC(kernel='linear', gamma=2)
     SVMtrain.fit(Xtrain, ytrain)
     for i, Xtweet in enumerate(MXs):
