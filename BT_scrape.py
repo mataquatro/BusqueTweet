@@ -1,12 +1,14 @@
 import requests
+import BTkey
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 
-c = MongoClient()
-db = c.BTdb
+c = MongoClient(BTkey.mongoLab())
+db = c['busquetweet-db']
 Gawk = db.gwker
 Gawk.remove()
 
+print "Collecting recent content from Gawker sites..."
 # Visit a list of Gawker sites to begin the process!
 gLinks = ['http://gizmodo.com', 'http://io9.com', 'http://jezebel.com', 'http://lifehacker.com', 'http://deadspin.com', 'http://sploid.gizmodo.com', 'http://valleywag.gawker.com/']
 site_class = ['gadgets & technology', 'science & science fiction', "celebrity, sex & womens fashion", 'productivity tips', 'sports', 'news, futuristic ideas & technology', 'Silicon Valley gossip']

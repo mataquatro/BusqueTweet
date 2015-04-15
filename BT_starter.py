@@ -1,4 +1,4 @@
-from tweepy import API, OAuthHandler, Cursor
+from tweepy import API, OAuthHandler
 from tweepy.streaming import StreamListener
 import BTkey
 import collections
@@ -117,9 +117,6 @@ class Tweep(object):
         
     # Insert the collected twitter data into the database, BTdb.  
     def mongo_filler(self):
-        client = pymongo.MongoClient()
-        db = client.BTdb
-        tweeps = db.tweeps
         tweeps.update({'_id': self.u_id}, {'UserName': self.user_name,
                        'Description': self.description,
                        'TweetContent': {'Text': self.tw_text, 'Links': self.links},
@@ -145,13 +142,27 @@ auth.set_access_token(atoken, asecret)
 # Preparing the api wrapper
 api = API(auth)
 
+# Connect to the database and remove old data from the collection.
+client = pymongo.MongoClient(BTkey.mongoLab())
+db = client['busquetweet-db']
+tweeps = db.tweeps
+tweeps.remove()
+
 # Request a Twitter user to search. Default will be @GilesHC
-twitterusername = raw_input("Who do you want to check out? ") or 'GilesHC'
-s = Tweep(twitterusername)
-s.converse()
-s.tcontent()
-s.top_mentions()
-s.top_replies()
-s.top_hashtags()
-s.context_tweets()
-s.mongo_filler()
+twitterusername = ''
+for n in range(5):
+    twitterusername = raw_input("\nWho do you want to check out? [ to quit, type 'hijole' ]\n") or 'GilesHC'
+    if twitterusername != 'hijole':
+        print "Collecting data from Twitter..."
+        s = Tweep(twitterusername)
+        s.converse()
+        s.tcontent()
+        s.top_mentions()
+        s.top_replies()
+        s.top_hashtags()
+        s.context_tweets()
+        s.mongo_filler()
+        print "Success!\n"
+    else:
+        break
+print "."

@@ -1,8 +1,9 @@
+import BTkey
 from pymongo import MongoClient
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 import numpy as np
-from sklearn import svm, cross_validation
+from sklearn import svm
 from collections import Counter, defaultdict
 
 # This object will hold the training data
@@ -16,8 +17,10 @@ class GawkerTrainer(object):
 stopwords = stopwords.words('english')
 gawk_class = ['gadgets & technology', 'science & science fiction', "celebrity, sex & womens fashion", 'productivity tips', 'sports', 'news, futuristic ideas & technology', 'Silicon Valley gossip']
 
-client = MongoClient()
-db = client.BTdb
+print "Work, work, work!"
+print "Retrieving data from the database..."
+client = MongoClient(BTkey.mongoLab())
+db = client['busquetweet-db']
 gawk = db.gwker
 
 # add the following words to the list of stopwords:
@@ -138,6 +141,8 @@ for i, c in enumerate(gawk_class):
         elif i == 6:
             valley = GawkerTrainer(c, top_words)
             
+print "Classifying the Twitter data...\n"
+
 all_classes = [giz, io9, jez, hac, dspin, splo, valley]
 dset = structure_train()
 
